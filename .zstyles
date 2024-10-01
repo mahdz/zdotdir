@@ -17,15 +17,17 @@ antidote_repo=$ANTIDOTE_HOME/mattmc3/antidote
 zstyle ':antidote:home' path $ANTIDOTE_HOME
 zstyle ':antidote:repo' path $antidote_repo
 zstyle ':antidote:bundle' use-friendly-names 'yes'
+zstyle ':antidote:bundle' file "$ZDOTDIR/.zplugins.txt"
+zstyle ':antidote:bundle' file "$ZDOTDIR/.zplugins.zsh"
 zstyle ':antidote:plugin:*' defer-options '-p'
-zstyle ':antidote:*' zcompile 'yes'
+#zstyle ':antidote:*' zcompile 'yes'
 
 #
 # Zephyr features
 #
 
 # Use caching.
-zstyle ':zephyr:plugin:*' 'use-cache' yes
+#zstyle ':zephyr:plugin:*' 'use-cache' yes
 
 #
 # Editor
@@ -73,7 +75,17 @@ zstyle ':zephyr:plugin:completion' compstyle 'zephyr'
 #
 
 # Set prompt
-zstyle ':zephyr:plugin:prompt' theme starship mmc
+zstyle ':zephyr:plugin:prompt' theme starship gruvbox-rainbow
+
+#
+# eza
+#
+
+zstyle ':omz:plugins:eza' 'dirs-first' yes
+zstyle ':omz:plugins:eza' 'git-status' yes
+zstyle ':omz:plugins:eza' 'header' yes
+zstyle ':omz:plugins:eza' 'icons' yes
+zstyle ':omz:plugins:eza' 'size-prefix' binary
 
 #
 # Completions
