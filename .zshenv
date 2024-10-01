@@ -19,20 +19,6 @@ export XDG_BIN_HOME=${XDG_BIN_HOME:-$HOME/.local/bin}
 mkdir -p "$XDG_CONFIG_HOME" "$XDG_CACHE_HOME" "$XDG_DATA_HOME" "$XDG_STATE_HOME" "$XDG_BIN_HOME"
 
 
-# Fish-like dirs
-: ${__zsh_config_dir:=${ZDOTDIR:-${XDG_CONFIG_HOME:-$HOME/.config}/zsh}}
-: ${__zsh_user_data_dir:=${XDG_DATA_HOME:-$HOME/.local/share}/zsh}
-: ${__zsh_cache_dir:=${XDG_CACHE_HOME:-$HOME/.cache}/zsh}
-
-# Ensure Zsh directories exist.
-() {
-  local zdir
-  for zdir in $@; do
-    [[ -d "${(P)zdir}" ]] || mkdir -p -- "${(P)zdir}"
-  done
-} __zsh_{config,user_data,cache}_dir XDG_{CONFIG,CACHE,DATA,STATE}_HOME
-
-
 #
 # Shell utils
 #
