@@ -11,23 +11,38 @@
 
 # single character shortcuts - be sparing!
 alias _=sudo
-alias l=ls
+# alias l=ls
 alias g=git
 
 # mask built-ins with better defaults
 alias ping='ping -c 5'
-alias vi=vim
-alias nv=nvim
-alias grep="${aliases[grep]:-grep} --exclude-dir={.git,.vscode}"
+# alias vi=vim
+# alias nv=nvim
+# alias grep="${aliases[grep]:-grep} --exclude-dir={.git,.vscode}"
 
 # directories
 alias secrets="cd ${XDG_DATA_HOME:-~/.local/share}/secrets"
 
-# more ways to ls
-alias ll='ls -lh'
-alias la='ls -lAh'
-alias lsa="ls -aG"
-alias ldot='ls -ld .*'
+# If eza installed, then use eza for some ls commands
+if command -v "eza" > /dev/null; then
+  alias l='eza -aF --icons' # Quick ls
+  alias la='eza -aF --icons' # List all
+  alias ll='eza -laF --icons' # Show details
+  alias lm='eza -lahr --color-scale --icons -s=modified' # Recent
+  alias lb='eza -lahr --color-scale --icons -s=size' # Largest / size
+  #alias tree='f() { eza -aF --tree -L=${1:-2} --icons };f'
+else
+  alias la='ls -A' # List all files/ includes hidden
+  alias ll='ls -lAFh' # List all files, with full details
+  alias lb='ls -lhSA' # List all files sorted by biggest
+  alias lm='ls -tA -1' # List files sorted by last modified
+fi
+
+# File listing options
+alias lr='ls -R' # List files in sub-directories, recursivley
+alias lf='ls -A | grep' # Use grep to find files
+alias lc='find . -type f | wc -l' # Shows number of files
+alias ld='ls -l | grep "^d"' # List directories only
 
 # fix typos
 alias get=git
@@ -46,13 +61,26 @@ alias isodate="date +%Y-%m-%dT%H:%M:%S%z"
 alias utc="date -u +%Y-%m-%dT%H:%M:%SZ"
 alias unixepoch="date +%s"
 
-# find
-alias fd='find . -type d -name'
-alias ff='find . -type f -name'
+# # find
+# alias fd='find . -type d -name'
+# alias ff='find . -type f -name'
+
+# Find + manage aliases
+alias al='alias | less' # List all aliases
+alias as='alias | grep' # Search aliases
+alias ar='unalias' # Remove given alias
 
 # homebrew
 #alias brewup="brew update && brew upgrade && brew cleanup"
 #alias brewinfo="brew leaves | xargs brew desc --eval-all"
+
+# System Monitoring
+alias meminfo='free -m -l -t' # Show free and used memory
+alias memhog='ps -eo pid,ppid,cmd,%mem --sort=-%mem | head' # Processes consuming most mem
+alias cpuhog='ps -eo pid,ppid,cmd,%cpu --sort=-%cpu | head' # Processes consuming most cpu
+alias cpuinfo='lscpu' # Show CPU Info
+alias distro='cat /etc/*-release' # Show OS info
+alias ports='netstat -tulanp' # Show open ports
 
 # disk usage
 alias biggest='du -s ./* | sort -nr | awk '\''{print $2}'\'' | xargs du -sh'
@@ -66,10 +94,13 @@ alias urldecode='python3 -c "import sys, urllib.parse as ul; \
 alias urlencode='python3 -c "import sys, urllib.parse as ul; \
     print (ul.quote_plus(sys.argv[1]))"'
 
+# App Specific
+if command -v "code-insiders" > /dev/null; then; alias code='code-insiders'; fi
+
 # misc
 alias please=sudo
-alias zshrc='${EDITOR:-vim} "${ZDOTDIR:-$HOME}"/.zshrc'
-alias zbench='for i in {1..10}; do /usr/bin/time zsh -lic exit; done'
+alias zshrc='${EDITOR:-code} "${ZDOTDIR:-$HOME}"/.zshrc'
+#alias zbench='for i in {1..10}; do /usr/bin/time zsh -lic exit; done'
 alias cls="clear && printf '\e[3J'"
 
 # print things
@@ -81,19 +112,19 @@ alias print-functions='print -l ${(k)functions[(I)[^_]*]} | sort'
 alias autorotate="jhead -autorot"
 
 # dotfiles
-: ${DOTFILES:=$HOME/.dotfiles}
-alias dotf='cd "$DOTFILES"'
-alias dotfed='cd "$DOTFILES" && ${VISUAL:-${EDITOR:-vim}} .'
-alias dotfl="cd \$DOTFILES/local"
-alias fdot='cd ${XDG_CONFIG_HOME:-~/.config}/fish'
-alias fconf=fdot
-alias zdot='cd $ZDOTDIR'
+# : ${DOTFILES:=$HOME/.dotfiles}
+# alias dotf='cd "$DOTFILES"'
+# alias dotfed='cd "$DOTFILES" && ${VISUAL:-${EDITOR:-vim}} .'
+# alias dotfl="cd \$DOTFILES/local"
+# alias fdot='cd ${XDG_CONFIG_HOME:-~/.config}/fish'
+# alias fconf=fdot
+alias zdot='cd ${ZDOTDIR:-~}'
 
 # java
-alias setjavahome="export JAVA_HOME=\`/usr/libexec/java_home\`"
+# alias setjavahome="export JAVA_HOME=\`/usr/libexec/java_home\`"
 
 # todo-txt
-alias t="todo.sh"
-alias todos="$VISUAL $HOME/Desktop/todo.txt"
+# alias t="todo.sh"
+# alias todos="$VISUAL $HOME/Desktop/todo.txt"
 
 # vim: ft=zsh sw=2 ts=2 et
