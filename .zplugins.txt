@@ -1,0 +1,186 @@
+#!/bin/zsh
+#
+# .zsh_plugins.txt - antidote plugins file
+#
+
+### Overview
+#
+# The `.zsh_plugins.txt` file is used by antidote to configure Zsh bundles. Bundles are
+# just a fancy way of referring to Zsh utilities, frameworks, prompts, or plugins.
+# `.zsh_plugins.txt` is used by antidote to generate a static `.zsh_plugins.zsh` file,
+# which can then be sourced in your `.zshrc`. You can use this file as a starting point
+# for your own config. Strip out instructional comments (ie: lines beginning with a '#')
+# and any plugins you don't need, then add what you like and make it yours!
+#
+# NOTE: Order matters in this file! Some bundles need to be last, and others are
+# prerequisites. Read the documentation for the plugins you use to ensure proper
+# configuration.
+#
+###
+
+
+#
+# Init
+#
+
+mattmc3/zephyr path:plugins/environment
+mattmc3/zephyr path:plugins/homebrew
+
+
+### Completions
+#
+# You may want to add some additional completions to Zsh. Completions look in your fpath
+# for completion functions, which are functions named with a leading underscore
+# (eg: _git). You need to add all supplemental completions to your fpath prior to
+# running `compinit` to use completions functionality properly. You will want to find
+# a completion plugin that runs `compinit` for you, or you can run it yourself in
+# your .zshrc after antidote loads like this:
+#
+#   autoload -Uz compinit && compinit
+#
+###
+
+# zsh-users/zsh-completions is a popular plugin for adding supplemental completions.
+# We combine the `path:` and `kind:fpath` annotations here:
+zsh-users/zsh-completions kind:fpath path:src
+
+# This is the recommended plugin for handling compinit and setting completion zstyles.
+# It's designed to handle all the complexity of the Zsh completion system so the user
+# doesn't have to.
+mattmc3/ez-compinit
+
+
+### Regular Plugins
+#
+# Plugins are the simplest kind of bundles. You can point to a full git URL, or if you
+# assume GitHub.com, then you can use the user/repo shorthand.
+#
+###
+
+
+### Local Plugins
+#
+# Plugins don't have to come from GitHub. You can also use local files or directories to
+# host your own custom plugins.
+#
+###
+#$ZDOTDIR/.zaliases
+#$ZDOTDIR/custom/plugins/example
+
+
+### Prompts
+#
+# You can make certain themes available to the built-in Zsh prompt command using the
+# `kind:fpath` annotation. A theme is not active for the prompt until this command is
+# run:
+#
+#   autoload -Uz promptinit && promptinit
+#   prompt ${prompt_name:-pure}
+#
+# There are two ways to load prompts.
+# - Add multiple prompt plugins to your `$fpath` with `kind:fpath` and then later in
+#   your .zshrc run the Zsh built-in `prompt` to select the theme.
+# - Or, just load one prompt like a regular plugin.
+#
+###
+
+mattmc3/zephyr path:plugins/prompt
+
+# Use kind:fpath for prompts you want available to promptinit.
+romkatv/powerlevel10k kind:fpath
+sindresorhus/pure kind:fpath
+
+# Or, just load a prompt plugin the normal way.
+# sindresorhus/pure
+
+
+### Framework: Oh-My-Zsh
+#
+# Oh-My-Zsh is a very popular Zsh framework. You might choose to use plugins from OMZ
+# in your own config. Depending on which plugins you use, you may also need to include
+# OMZ's entire "lib" directory. If you do this, be careful - "lib" configures a lot of
+# very broad settings. If you are familiar with what you are doing, you may choose to
+# only include parts of "lib".
+#
+#   # use all of lib
+#   ohmyzsh/ohmyzsh path:lib
+#   # -OR-, only use only the specific files we care about
+#   ohmyzsh/ohmyzsh path:lib/clipboard.zsh
+#
+####
+getantidote/use-omz
+ohmyzsh/ohmyzsh path:lib/clipboard.zsh
+ohmyzsh/ohmyzsh path:lib/grep.zsh
+
+ohmyzsh/ohmyzsh path:plugins/colored-man-pages
+ohmyzsh/ohmyzsh path:plugins/copybuffer
+ohmyzsh/ohmyzsh path:plugins/copyfile
+ohmyzsh/ohmyzsh path:plugins/copypath
+ohmyzsh/ohmyzsh path:plugins/extract
+ohmyzsh/ohmyzsh path:plugins/eza
+ohmyzsh/ohmyzsh path:plugins/magic-enter
+ohmyzsh/ohmyzsh path:plugins/thefuck
+ohmyzsh/ohmyzsh path:plugins/zoxide
+#ohmyzsh/ohmyzsh path:plugins/git
+
+
+#
+# Utils
+#
+
+mattmc3/zephyr path:plugins/color
+mattmc3/zephyr path:plugins/directory
+mattmc3/zephyr path:plugins/history
+mattmc3/zephyr path:plugins/utility
+
+
+#
+# Editor
+#
+
+mattmc3/zephyr path:plugins/editor
+
+
+#
+# macOS
+#
+
+mattmc3/zephyr path:plugins/macos conditional:is-macos
+#ohmyzsh/ohmyzsh path:plugins/brew conditional:is-macos
+ohmyzsh/ohmyzsh path:plugins/iterm2 conditional:is-macos
+
+
+#
+# Fish-like
+#
+
+mattmc3/zephyr path:plugins/zfunctions
+mattmc3/zephyr path:plugins/confd
+
+
+### Deferred Plugins
+#
+# Antidote allows you to defer loading plugins. This is similar to concepts like "turbo
+# mode" in other plugin managers. Antidote handles deferring plugins by leveraging
+# romkatv/zsh-defer, which "defers execution of a zsh command until zsh has nothing else
+# to do and is waiting for user input". In general, you should not defer plugins unless
+# you know for sure they properly support deferred loading, and there are no adverse
+# side-effects (see: https://github.com/romkatv/zsh-defer#Caveats). However, for
+# certain plugins, this can greatly increase your zsh startup speed.
+#
+###
+
+# Syntax highlighting
+zsh-users/zsh-syntax-highlighting kind:defer
+#zdharma-continuum/fast-syntax-highlighting kind:defer
+
+### Final Plugins
+#
+# Remember plugin order matters! Put plugins that need run last at the bottom of your
+# .zsh_plugins.txt file.
+#
+###
+
+# These popular core plugins should be loaded at the end
+zsh-users/zsh-autosuggestions kind:defer
+zsh-users/zsh-history-substring-search kind:defer
